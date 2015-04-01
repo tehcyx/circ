@@ -8,6 +8,13 @@
 #define CIRC_PORT 6665
 #endif
 
+/**
+ * Possible IRC commands include:
+ *
+ * KICK, MODE, INVITE, TOPIC, NAMES, WHO, WHOIS
+ *
+ */
+
 
 int main(int argc, char **argv) {
 
