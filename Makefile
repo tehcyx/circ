@@ -1,11 +1,11 @@
-SOURCES=src/main.c
+SOURCES=src/main.c src/sqlitedb.c
 OBJECTS=$(SOURCES:.c=.o)
 FLAGS=-c -Wall
 CC=cc
 #LIBS=-lmxml -lpthread -L./mxml/lib
 #INCLUDES=-I./mxml/include/ -I./include/
-LIBS=-lpthread -lm
-INCLUDES=
+LIBS=-lsqlite3
+INCLUDES=-I./src/include/ -I./src/
 FRAMEWORKS=
 #FRAMEWORKS=-framework OpenGL -framework GLUT
 
@@ -19,4 +19,4 @@ circ: $(OBJECTS)
 	$(CC) $(FLAGS) $(INCLUDES) $< -o $@
 
 clean:
-	rm src/main.o
+	rm src/main.o src/sqlitedb.o

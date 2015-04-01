@@ -31,3 +31,6 @@ circ
 
 # Debug files
 *.dSYM/
+
+# SQLite database
+circ.db
