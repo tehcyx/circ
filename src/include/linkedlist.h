@@ -10,7 +10,7 @@ typedef struct node_struct {
 
 typedef struct linkedlist {
 	node* head;
-	void (*free_data)(void*); //Function that frees the data in node. 
+	void (*free_data)(void*); // pass in a function to free the node's data
 } list;
 
 #endif
