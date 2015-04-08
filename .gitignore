@@ -34,3 +34,6 @@ circ
 
 # SQLite database
 circ.db
+
+# log files
+logs/

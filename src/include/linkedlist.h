@@ -1,5 +1,5 @@
-#ifndef _LINKEDLIST
-#define _LINKEDLIST
+#ifndef _LINKEDLIST_H_
+#define _LINKEDLIST_H_
 
 #include <stdlib.h>
 #include <stdbool.h>
