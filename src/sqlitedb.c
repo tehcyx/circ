@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <sqlite3.h>
 
+#include <logger.h>
+
 
 void init_db() {
 	char *err_msg = 0;
@@ -34,5 +36,5 @@ void init_db() {
 
 
 void teardown_db() {
-	printf("Teardown %s\n", "");
+	logger(LOG_DEBUG, "DB shutdown", NULL);
 }

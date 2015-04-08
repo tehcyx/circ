@@ -1,5 +1,5 @@
-#ifndef _SQLITEDB
-#define _SQLITEDB
+#ifndef _SQLITEDB_H_
+#define _SQLITEDB_H_
 
 #include <sqlite3.h>
 

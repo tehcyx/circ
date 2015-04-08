@@ -5,6 +5,7 @@
 
 #include <sqlitedb.h>
 #include <linkedlist.h>
+#include <logger.h>
 
 /* Define port to use */
 #ifndef CIRC_PORT
