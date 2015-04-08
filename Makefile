@@ -1,4 +1,4 @@
-SOURCES=src/main.c src/sqlitedb.c
+SOURCES=src/main.c src/sqlitedb.c src/linkedlist.c
 OBJECTS=$(SOURCES:.c=.o)
 FLAGS=-c -Wall
 CC=cc
@@ -19,4 +19,4 @@ circ: $(OBJECTS)
 	$(CC) $(FLAGS) $(INCLUDES) $< -o $@
 
 clean:
-	rm src/main.o src/sqlitedb.o
+	rm src/main.o src/sqlitedb.o src/linkedlist.o
