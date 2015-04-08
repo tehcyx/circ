@@ -34,5 +34,5 @@ void init_db() {
 
 
 void teardown_db() {
-	printf("Hello %s\n", "");
+	printf("Teardown %s\n", "");
 }

@@ -4,10 +4,15 @@
 #include <sqlite3.h>
 
 #include <sqlitedb.h>
+#include <linkedlist.h>
 
 /* Define port to use */
 #ifndef CIRC_PORT
 #define CIRC_PORT 6665
+#endif
+
+#ifndef CIRC_VERSION
+#define CIRC_VERSION 0.1
 #endif
 
 /**
@@ -17,15 +22,11 @@
  *
  */
 
-
 int main(int argc, char **argv) {
 
 	init_db();
 
-	// logic
-	// for(;;) {
-	// 	// do stuff
-	// }
+	// do stuff
 
 	teardown_db();
 
