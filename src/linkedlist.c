@@ -1,5 +1,4 @@
-#include <stdbool.h>
-#include "include/linkedlist.h"
+#include <linkedlist.h>
 
 node* create_node(void* data) { // create a new list
 	node* n = (node*) malloc(sizeof(node));
