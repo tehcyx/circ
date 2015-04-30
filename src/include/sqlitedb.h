@@ -6,9 +6,6 @@
 sqlite3 *db;
 sqlite3_stmt *res;
 
-
 void init_db();
-
-void teardown_db();
 
 #endif
