@@ -30,5 +30,7 @@ int main(int argc, char **argv) {
 		exit(EXIT_FAILURE); 
 	}
 
+	server_accept(socket_fd);
+
 	return 0;             /* ANSI C requires main to return int. */
 }
