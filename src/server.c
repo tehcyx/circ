@@ -1,4 +1,6 @@
 #include <server.h>
+#include <client.h>
+#include <pthread.h>
 
 static const int MAX_PENDING_CONNECTIONS = 1024;
 
@@ -54,4 +56,27 @@ int server_run(char* port) {
 int server_sock_listen(int sock_fd) {
 	printf("Listening...");
 	return listen(sock_fd, MAX_PENDING_CONNECTIONS);
+}
+
+void server_accept(int sock_fd) {
+	int client_sock = -1;
+	socklen_t client_length = sizeof(struct sockaddr);
+	struct sockaddr client_addr;
+	client_info* new_client;
+
+	memset(&client_addr, 0, sizeof(struct sockaddr));
+
+	for(;;) {
+		client_sock = accept(sock_fd, &client_addr, &client_length);
+
+		if (client_sock < 0) {
+			printf("Client connection failed: %s\n", strerror(errno));
+			continue;
+		}
+
+		new_client = (client_info*)malloc(sizeof(client_info));
+		new_client->sock = client_sock;
+		printf("Connecting client on socket %i\n", client_sock);
+		pthread_create(&(new_client->thread), NULL, (void*(*)(void*))client_connect, (void*)(new_client));
+	}
 }
