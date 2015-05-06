@@ -1,5 +1,5 @@
-#ifndef _LINKEDLIST_H_
-#define _LINKEDLIST_H_
+#ifndef _LOGGER_H_
+#define _LOGGER_H_
 
 #define LOG_CRITICAL "CRITICAL"
 #define LOG_ERROR "ERROR"
