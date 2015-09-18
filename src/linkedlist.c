@@ -7,7 +7,7 @@ node* create_node(void* data) { // create a new list
 	return n;
 }
 
-list* create_list(void (*free_fnc)(void*)) { // create a new list and pass in function to free data for deletion if needed
+list* list_create(void (*free_fnc)(void*)) { // create a new list and pass in function to free data for deletion if needed
 	list* lst = (list*) malloc(sizeof(list));
 	lst->free_data = free_fnc;
 	lst->head = NULL;

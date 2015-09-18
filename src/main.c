@@ -7,6 +7,7 @@
 #include <linkedlist.h>
 #include <logger.h>
 #include <server.h>
+#include <client.h>
 
 /* Define port to use */
 #ifndef CIRC_PORT
@@ -24,6 +25,8 @@ int main(int argc, char **argv) {
 	int socket_fd = server_run(CIRC_PORT);
 
 	int errno;
+
+	client_list_init();
 
 	if ( (errno = server_sock_listen(socket_fd)) < 0) {
 		fprintf(stderr, "Server could not start, listen on socket failed: %s\n", strerror(errno)); 

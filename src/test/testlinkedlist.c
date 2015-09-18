@@ -11,7 +11,7 @@ typedef struct values_struct {
 } values;
 
 int main(int argc, char **argv) {
-	list* lst = create_list( (void(*)(void*))free_nothing ); //function pointer
+	list* lst = list_create( (void(*)(void*))free_nothing ); //function pointer
 
 	if (list_empty(lst)) {
 		printf("List is empty %s\n", "");
