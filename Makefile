@@ -1,4 +1,4 @@
-SOURCES=src/main.c src/sqlitedb.c src/linkedlist.c src/logger.c src/server.c src/client.c
+SOURCES=src/main.c src/sqlitedb.c src/linkedlist.c src/logger.c src/server.c src/client.c src/stringutil.c src/channel.c
 OBJECTS=$(SOURCES:.c=.o)
 FLAGS=-c -Wall
 CC=cc
@@ -10,13 +10,13 @@ FRAMEWORKS=
 #FRAMEWORKS=-framework OpenGL -framework GLUT
 
 all: circ
-	
+
 circ: $(OBJECTS)   
 	$(CC) $(OBJECTS) $(LIBS) $(FRAMEWORKS) -o $@
-	make clean	
-	
+	make clean
+
 .c.o:
 	$(CC) $(FLAGS) $(INCLUDES) $< -o $@
 
 clean:
-	rm src/main.o src/sqlitedb.o src/linkedlist.o src/logger.o src/server.o src/client.o
+	rm src/main.o src/sqlitedb.o src/linkedlist.o src/logger.o src/server.o src/client.o src/stringutil.o

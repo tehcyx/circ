@@ -18,7 +18,7 @@ typedef struct linkedlist {
 
 node* create_node(void* data); // create a new list
 
-list* create_list(void (*free_fnc)(void*)); // create a new list and pass in function to free data for deletion
+list* list_create(void (*free_fnc)(void*)); // create a new list and pass in function to free data for deletion
 
 void list_add(list* lst, node* n); // add node n to list lst and return new head
 
