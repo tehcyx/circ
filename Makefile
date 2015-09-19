@@ -19,4 +19,4 @@ circ: $(OBJECTS)
 	$(CC) $(FLAGS) $(INCLUDES) $< -o $@
 
 clean:
-	rm src/main.o src/sqlitedb.o src/linkedlist.o src/logger.o src/server.o src/client.o src/stringutil.o
+	rm src/main.o src/sqlitedb.o src/linkedlist.o src/logger.o src/server.o src/client.o src/stringutil.o src/channel.o src/commands.o

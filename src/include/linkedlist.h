@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef struct node_struct node;
+typedef struct node_struct node; // make node available for use within node_struct
 
-typedef struct node_struct {
+struct node_struct {
 	void* data;
 	node* next;
-} node_st;
+};
 
 typedef struct linkedlist {
 	node* head;
