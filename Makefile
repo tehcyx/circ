@@ -1,4 +1,4 @@
-SOURCES=src/main.c src/sqlitedb.c src/linkedlist.c src/logger.c src/server.c src/client.c src/stringutil.c src/channel.c
+SOURCES=src/main.c src/sqlitedb.c src/linkedlist.c src/logger.c src/server.c src/client.c src/stringutil.c src/channel.c src/commands.c
 OBJECTS=$(SOURCES:.c=.o)
 FLAGS=-c -Wall
 CC=cc
