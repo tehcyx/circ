@@ -96,10 +96,16 @@ void client_connect(client_info* new_client) {
 }
 
 char* client_read_connect_cmd(char* cmd, char* args) {
-	char* arg1 = strtok(args, "\n");
-	arg1[strlen(arg1)-1] = '\0';
-	char* nick = (char*)malloc(sizeof(char)*(strlen(arg1) + 1)); 
-	strcpy(nick, args); 
+	char* nick;
+	if(strstr(args, "\n") != 0) {
+		char* arg1 = strtok(args, "\n");
+		arg1[strlen(arg1)-1] = '\0';
+		nick = (char*)malloc(sizeof(char)*(strlen(arg1) + 1));
+		strcpy(nick, arg1);
+	} else {
+		nick = (char*)malloc(sizeof(char)*(strlen(args) + 1));
+		strcpy(nick, args);
+	}
 	return nick; 
 }
 
