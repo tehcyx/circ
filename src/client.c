@@ -73,7 +73,7 @@ void client_connect(client_info* new_client) {
 					write(client_sock, errMsg, strlen(errMsg) + 1); 
 					free(nick); 
 				} else {
-					printf("New user '%s' entering lobby.\n", nick);  
+					printf("User '%s' entering lobby.\n", nick);  
 					free(next); 
 					client_init(nick, client_sock, client_thread);			
 				}
