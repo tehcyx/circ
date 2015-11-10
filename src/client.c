@@ -2,6 +2,7 @@
 #include <client.h>
 #include <pthread.h>
 #include <string.h>
+#include <regex.h>
 
 #include <commands.h>
 #include <stringutil.h>
@@ -119,7 +120,7 @@ char* client_read_connect_pass(char* cmd, char* args, bool* quit) {
 }
 
 char* client_read_socket(int socket, char* buffer, bool* err) {
-	int bytes_read = -1;
+	unsigned long bytes_read = -1;
 	char buf[BUFFER_SIZE];
 	char* next;
 	*err = false;

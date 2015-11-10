@@ -1,22 +1,18 @@
 SOURCES=src/main.c src/sqlitedb.c src/linkedlist.c src/logger.c src/server.c src/client.c src/stringutil.c src/channel.c src/commands.c
 OBJECTS=$(SOURCES:.c=.o)
-FLAGS=-c -Wall
-CC=cc
-#LIBS=-lmxml -lpthread -L./mxml/lib
-#INCLUDES=-I./mxml/include/ -I./include/
-LIBS=-lsqlite3 -lpthread
-INCLUDES=-I./src/include/ -I./src/
-FRAMEWORKS=
-#FRAMEWORKS=-framework OpenGL -framework GLUT
+CFLAGS=-std=c99 -Wall -Wextra -Wno-unused-parameter -ggdb3
+CFLAGS+=-D_THREAD_SAFE
+CFLAGS+=-I./src/include
+LIBS=-lsqlite3  -lpthread
 
-all: circ
+all: bin/circ
 
-circ: $(OBJECTS)   
-	$(CC) $(OBJECTS) $(LIBS) $(FRAMEWORKS) -o $@
-	make clean
-
+bin/circ: $(OBJECTS) $(CXX_OBJS)
+	[ -d bin ] || mkdir -p bin
+	$(CC) $(OBJECTS) $(CXX_OBJS) $(LIBS) -o $@
+	
 .c.o:
-	$(CC) $(FLAGS) $(INCLUDES) $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm src/main.o src/sqlitedb.o src/linkedlist.o src/logger.o src/server.o src/client.o src/stringutil.o src/channel.o src/commands.o
+	rm -rf bin $(OBJECTS) $(CXX_OBJS)

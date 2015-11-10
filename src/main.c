@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
 	init_db();
 
 	int socket_fd = server_run(CIRC_PORT);
+	logger(LOG_DEBUG, "hello", NULL);
 
 	int errno;
 
