@@ -13,7 +13,6 @@ void trim_str(char* str) {
 
 bool valid_charset(char* test) {
 	if (test == NULL) {
-		printf("In valid_charse: NULL string received.\n"); 
 		return false; 
 	}
 	int len = strlen(test), i = 0; 

@@ -17,7 +17,6 @@ void logger(const char* tag, const char* message, const char* logfile) {
 
 	char* date = ctime(&now);
 	*(date+24) = 0; // cut off the newline for nicer logs
-
 	fprintf(fp, "%s [%s]: %s\n", date, tag, message);
 
 	fclose(fp);
