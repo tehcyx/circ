@@ -14,8 +14,12 @@
 #define CIRC_PORT "6665"
 #endif
 
-#ifndef CIRC_VERSION
-#define CIRC_VERSION 0.1
+#ifndef CIRC_VERSION_MAJOR
+#define CIRC_VERSION_MAJOR 0
+#endif
+
+#ifndef CIRC_VERSION_MINOR
+#define CIRC_VERSION_MINOR 1
 #endif
 
 int main(int argc, char **argv) {
