@@ -7,20 +7,23 @@
 #include <channel.h>
 
 struct client_struct {
-	char* nick; 
+	char* nick;
 	pthread_t client_thread; //Each user has its own thread
-	int client_sock; 
-	channel* current_channel; 
-	pthread_mutex_t client_sock_mutex; 
+	int client_sock;
+	channel* current_channel;
+	pthread_mutex_t client_sock_mutex;
 };
 
-typedef struct client_struct client; 
+typedef struct client_struct client;
+
+char* client_util_read_args(char* cmd, char* args);
 
 void client_connect(client_info* new_client);
 
 char* client_read_socket(int socket, char* buffer, bool* err);
 char* client_read_connect_cmd(char* cmd, char* args);
 char* client_read_connect_pass(char* cmd, char* args, bool* pass);
+char* client_read_recipient(char* cmd, char* args);
 
 bool client_nick_exists(char* nick);
 

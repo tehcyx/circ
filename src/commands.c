@@ -14,3 +14,7 @@ const char* PARAMETERS_MISSING = "461";
 
 // Misc
 const char* PRINT_CMD = "PRINT";
+
+// client commands
+const char* PRIVMSG_CMD = "PRIVMSG";
+const char* NOTICE_CMD = "NOTICE";

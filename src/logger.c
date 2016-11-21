@@ -1,3 +1,6 @@
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <logger.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +10,8 @@ void logger(const char* tag, const char* message, const char* logfile) {
 	FILE* fp;
 
 	if (logfile == NULL) {
+		ensurePathExists("logs");
+
 		fp = fopen("logs/log.txt", "a");
 	} else {
 		fp = fopen(logfile, "a");
@@ -20,4 +25,12 @@ void logger(const char* tag, const char* message, const char* logfile) {
 	fprintf(fp, "%s [%s]: %s\n", date, tag, message);
 
 	fclose(fp);
+}
+
+void ensurePathExists(const char* path) {
+	struct stat st = {0};
+
+	if (stat(path, &st) == -1) {
+	    mkdir(path, 0700);
+	}
 }
