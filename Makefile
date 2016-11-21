@@ -1,9 +1,9 @@
 SOURCES=src/main.c src/sqlitedb.c src/linkedlist.c src/logger.c src/server.c src/client.c src/stringutil.c src/channel.c src/commands.c
 OBJECTS=$(SOURCES:.c=.o)
-CFLAGS=-std=c99 -Wall -Wextra -Wno-unused-parameter -ggdb3
+CFLAGS=-std=gnu99 -Wall -Wextra -Wno-unused-parameter -ggdb3
 CFLAGS+=-D_THREAD_SAFE
 CFLAGS+=-I./src/include
-LIBS=-lsqlite3  -lpthread
+LIBS=-lsqlite3 -lpthread
 
 all: bin/circ
 

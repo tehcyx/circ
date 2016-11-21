@@ -7,6 +7,6 @@
 #define LOG_DEBUG "DEBUG"
 
 void logger(const char* tag, const char* message, const char* logfile);
+void ensurePathExists(const char* path);
 
 #endif
-

@@ -2,7 +2,7 @@
 IRC server written in C (project to get hands on C networking) using sqlite
 
 # Test Clients
-I'm currently using [Colloquy](http://colloquy.info/) to test connecting to the server.
+I'm currently using [Colloquy](http://colloquy.info/) and [Shout](http://shout-irc.com/) to test my functionality.
 
 ### Currently Supported Commands
 * Connection registration [Connection registration](https://tools.ietf.org/html/rfc1459#section-4.1)
@@ -10,6 +10,11 @@ I'm currently using [Colloquy](http://colloquy.info/) to test connecting to the 
   * `NICK tehcyx [ <hopcount> ]` [Nick message](https://tools.ietf.org/html/rfc1459#section-4.1.2) - hopcount actually not yet supported
   * `QUIT [<Quit message>]` [Quit](https://tools.ietf.org/html/rfc1459#section-4.1.6) - Quit message not supported
   * more coming soon...
+
+### Started working on
+* Messaging [Sending messages](https://tools.ietf.org/html/rfc1459#section-4.4)
+  * `PRIVMSG tehcyx hello tehcyx` [Private messages](https://tools.ietf.org/html/rfc1459#section-4.4.1)
+  * `NOTICE tehcyx hello tehcyx` [Notice](https://tools.ietf.org/html/rfc1459#section-4.4.2)
 
 ### Upcoming Features
 * Connection registration [Connection registration](https://tools.ietf.org/html/rfc1459#section-4.1)
