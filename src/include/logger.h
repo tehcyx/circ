@@ -18,6 +18,6 @@ void log_error(const char* message, ...);
 void log_format(const char* tag, const char* message, va_list args);
 void log_info(const char* message, ...);
 
-void ensurePathExists(const char* path);
+void ensure_path_exists(const char* path);
 
 #endif
