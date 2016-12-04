@@ -29,12 +29,12 @@ void list_poll(list* lst) { // removes first element and returns "rest" of the l
 	}
 }
 
-int list_size(list* lst) { // returns size of the list
+uint8_t list_size(list* lst) { // returns size of the list
 	if (lst == NULL) { // list has no nodes
 		return 0;
 	} else { // list has 1 or more nodes
 		node* iterate = lst->head;
-		int count = 0;
+		uint8_t count = 0;
 		while (iterate != NULL) {
 			count += 1;
 			iterate = iterate->next;
@@ -48,7 +48,7 @@ void list_remove(list* lst, void* data) { // remove first occurence element with
 		node* old = lst->head;
 		if (old->data == data) {
 			lst->head = old->next;
-			free(old->data);
+			lst->free_data(old->data);
 			free(old);
 		} else {
 			node* iterate = old->next;
@@ -56,7 +56,7 @@ void list_remove(list* lst, void* data) { // remove first occurence element with
 				if (iterate->data == data) {
 					node* tmp = iterate;
 					old->next = iterate->next;
-					free(tmp->data);
+					lst->free_data(tmp->data);
 					free(tmp);
 					break;
 				}

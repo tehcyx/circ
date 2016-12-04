@@ -4,17 +4,15 @@
 #include <stdbool.h>
 #include <linkedlist.h>
 #include <pthread.h>
-#include <channel.h>
 
-struct client_struct {
+typedef struct client_struct {
 	char* nick;
 	pthread_t client_thread; //Each user has its own thread
 	int client_sock;
-	channel* current_channel;
 	pthread_mutex_t client_sock_mutex;
-};
+} client;
 
-typedef struct client_struct client;
+list* client_list; //List of all clients.
 
 char* client_util_read_args(char* cmd, char* args);
 
@@ -26,8 +24,6 @@ char* client_read_connect_pass(char* cmd, char* args, bool* pass);
 char* client_read_recipient(char* cmd, char* args);
 
 bool client_nick_exists(char* nick);
-
-list* client_list; //List of all clients.
 
 void client_list_init(); //create empty list of users
 void client_init(char* nick, int client_sock, pthread_t client_thread); //Creates a new user object, adds it to the list all_users and adds him to the lobby

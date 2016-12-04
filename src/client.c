@@ -5,15 +5,16 @@
 #include <regex.h>
 
 #include <commands.h>
+#include <utils.h>
 #include <stringutil.h>
+#include <channel.h>
 
-const int BUFFER_SIZE = 512;
+const uint16_t BUFFER_SIZE = 512;
 
 void client_connect(client_info* new_client) {
 	char buf[BUFFER_SIZE], errMsg[BUFFER_SIZE];
 	char* next = NULL;
 	char* nick = NULL;
-	char* recipient = NULL;
 
 	pthread_t client_thread = new_client->thread;
 	int client_sock = new_client->sock;
@@ -42,13 +43,16 @@ void client_connect(client_info* new_client) {
 			pthread_exit(NULL);
 			break;
 		} else if (next == NULL) {
-			continue;
+			continue; // nothing received yet, go on
 		} else {
-			printf("Received message from client: '%s'\n", next);
 			trim_str(next);
+			printf("Received message from client: '%s'\n", next);
 
 			char* cmd = strtok(next, " ");
 			char* args = strtok(NULL, " ");
+
+			printf("COMMAND: %s\n", cmd);
+			printf("ARGS: %s\n", args);
 
 			if (cmd == NULL) {
 				printf("Empty msg received from client. Ignoring\n");
@@ -56,7 +60,7 @@ void client_connect(client_info* new_client) {
 			} else if (strcmp(cmd, PASS_CMD) == 0 && !pass) {
 				client_read_connect_pass(cmd, args, &pass);
 				continue;
-			} else if (strcmp(cmd, NICK_CMD) == 0 && args != NULL && pass) {
+			} else if (strcmp(cmd, NICK_CMD) == 0 && args != NULL && pass) {;
 				nick = client_read_connect_cmd(cmd, args);
 
 				if (nick == NULL) {
@@ -74,31 +78,36 @@ void client_connect(client_info* new_client) {
 					write(client_sock, errMsg, strlen(errMsg) + 1);
 					free(nick);
 				} else {
-					printf("Starting user init for '%s'.\n", nick);
+					printf("Starting NICK init for '%s'.\n", nick);
 					free(next);
 					client_init(nick, client_sock, client_thread);
 				}
-				cmd = strtok(NULL, " ");
-				if (cmd != NULL) {
-					args = strtok(NULL, " ");
-					if(strcmp(cmd, USER_CMD) == 0 && args != NULL) {
-
-					}
-				}
-			} else if ((strcmp(cmd, PRIVMSG_CMD) == 0 && args != NULL) || (strcmp(cmd, NOTICE_CMD) == 0 && args != NULL)) {
-				recipient = client_read_recipient(cmd, args);
-				printf("Recipient is: %s\n", recipient);
-				free(recipient);
 			}
 		}
 
 		if (quit == true) {
 			printf("Received %s command from client. Terminating client socket %d.\n", QUIT_CMD, client_sock);
-			close(client_sock); //close socket
+			close(client_sock);
+			free(new_client);
 			free(next);
 			pthread_exit(NULL); //free user
+			break;
 		}
 	}
+}
+
+char* client_read_connect_cmd(char* cmd, char* args) {
+	char* nick;
+	if(strstr(args, "\n") != 0) {
+		char* arg1 = strtok(args, "\n");
+		arg1[strlen(arg1)-1] = '\0';
+		nick = (char*)malloc(sizeof(char)*(strlen(arg1) + 1));
+		strcpy(nick, arg1);
+	} else {
+		nick = (char*)malloc(sizeof(char)*(strlen(args) + 1));
+		strcpy(nick, args);
+	}
+	return nick;
 }
 
 char* client_util_read_args(char* cmd, char* args) {
@@ -113,14 +122,6 @@ char* client_util_read_args(char* cmd, char* args) {
 		strcpy(argReturn, args);
 	}
 	return argReturn;
-}
-
-char* client_read_recipient(char* cmd, char* args) {
-	return client_util_read_args(cmd, args);
-}
-
-char* client_read_connect_cmd(char* cmd, char* args) {
-	return client_util_read_args(cmd, args);
 }
 
 char* client_read_connect_pass(char* cmd, char* args, bool* quit) {
@@ -138,10 +139,13 @@ char* client_read_socket(int socket, char* buffer, bool* err) {
 	char* next;
 	*err = false;
 
-	if ((bytes_read = recv(socket, buf, BUFFER_SIZE, 0)) <= 0) {
-		*err = true;
-		return NULL;
-	}
+	// if ((bytes_read = recv(socket, buf, BUFFER_SIZE, 0)) <= 0) {
+	// 	*err = true;
+	// 	return NULL;
+	// }
+
+	bytes_read = recv(socket, buf, BUFFER_SIZE - 1, 0);
+	buf[bytes_read] = '\0';
 
 	size_t len = strnlen(buf, BUFFER_SIZE);
 
@@ -176,16 +180,16 @@ void client_free(client* c) {
 void client_init(char* nick, int client_sock, pthread_t client_thread) {
 	client* new_client = (client*)malloc(sizeof(client));
 	new_client->client_sock = client_sock;
-	new_client->current_channel = NULL;
 	new_client->nick = nick;
 	new_client->client_thread = client_thread;
 	pthread_mutex_init(&(new_client->client_sock_mutex), NULL);
 
-	// pthread_mutex_lock(&users_mutex); //Atomically add user to list
-	// add_to_list(client_list, new_client);
-	// pthread_mutex_unlock(&users_mutex);
+	node* n = create_node(new_client);
+	pthread_mutex_lock(&users_mutex); //to disable two thread working on the user list
+	list_add(client_list, n);
+	pthread_mutex_unlock(&users_mutex);
 
-	// add_user_to_lobby(new_client);
+	channel_client_join(LOBBY, new_client);
 }
 
 bool client_nick_exists(char* nick) {

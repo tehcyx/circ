@@ -7,7 +7,7 @@ void free_nothing () {
 }
 
 typedef struct values_struct {
-	int v;
+	uint8_t v;
 } values;
 
 int main(int argc, char **argv) {
@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 		printf("List is NOT empty %s\n", "");
 	}
 
-	int number = 5;
+	uint8_t number = 5;
 
 	if (list_contains(lst, number)) {
 		printf("List contains %i\n", number);
