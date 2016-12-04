@@ -3,7 +3,7 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <linkedlist.h>
+#include <stdbool.h>
 
 void trim_str(char* str);
 bool valid_charset(char* test);

@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 
-void init_db() {
+void db_init() {
 
 	char* db_file = "circ.db";
 
@@ -23,7 +23,7 @@ void init_db() {
 
 		printf("%s\n", "Setting up necessary tables.");
 
-		char* sql = "DROP TABLE IF EXISTS circ_channels;" 
+		char* sql = "DROP TABLE IF EXISTS circ_channels;"
 			"CREATE TABLE circ_channels(Id INTEGER PRIMARY KEY AUTOINCREMENT, Name VARCHAR(200), Mode VARCHAR(22), Motd VARCHAR(80), Owner INTEGER);";
 
 		rc = sqlite3_exec(db, sql, 0, 0, &err_msg);
@@ -32,7 +32,7 @@ void init_db() {
 
 			fprintf(stderr, "SQL error: %s\n", err_msg);
 
-			sqlite3_free(err_msg);        
+			sqlite3_free(err_msg);
 			sqlite3_close(db);
 
 			remove(db_file);
@@ -42,14 +42,14 @@ void init_db() {
 
 		printf("%s\n", "Table `circ_channels` created");
 
-		sql = "DROP TABLE IF EXISTS circ_users;" 
+		sql = "DROP TABLE IF EXISTS circ_users;"
 			"CREATE TABLE circ_users(Id INTEGER PRIMARY KEY AUTOINCREMENT, Name VARCHAR(200), Password VARCHAR(200));";
 
 		if (rc != SQLITE_OK ) {
 
 			fprintf(stderr, "SQL error: %s\n", err_msg);
 
-			sqlite3_free(err_msg);        
+			sqlite3_free(err_msg);
 			sqlite3_close(db);
 
 			remove(db_file);

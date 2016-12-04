@@ -1,23 +1,23 @@
 #include <stringutil.h>
 
 void trim_str(char* str) {
-	int len = strlen(str); 
-	int i = len - 1; 
+	int len = strlen(str);
+	int i = len - 1;
 
 	while (i >=0 && (str[i] == '\n' || str[i] == ' ' || str[i] == '\t')) {
-		--i; 
+		--i;
 	}
 
-	str[i+1] = '\0'; 
+	str[i+1] = '\0';
 }
 
 bool valid_charset(char* test) {
 	if (test == NULL) {
-		return false; 
+		return false;
 	}
-	int len = strlen(test), i = 0; 
+	int len = strlen(test);
 
-	for (; i < len; i++) {
+	for (int i = 0; i < len; i++) {
 		if (!char_in_charset(test[i]))
 			return false;
 	}
@@ -26,16 +26,16 @@ bool valid_charset(char* test) {
 
 bool char_in_charset(char c) {
 	if ('a' <= c && c <= 'z')
-		return true; 
+		return true;
 
 	if ('A' <= c && c <= 'Z')
-		return true; 
+		return true;
 
 	if ('0' <= c && c <= '9')
-		return true; 
+		return true;
 
 	if (c == '-' || c == '_' || c == '*' || c == '&' || c == '#')
-		return true; 
+		return true;
 
-	return false; 
+	return false;
 }

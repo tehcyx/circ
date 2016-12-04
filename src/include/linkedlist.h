@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 typedef struct node_struct node; // make node available for use within node_struct
 
@@ -24,7 +25,7 @@ void list_add(list* lst, node* n); // add node n to list lst and return new head
 
 void list_poll(list* lst); // removes first element and returns "rest" of the list and free data
 
-int list_size(list* lst); // returns size of the list
+uint8_t list_size(list* lst); // returns size of the list
 
 void list_remove(list* lst, void* data); // remove element that particular data, free data
 

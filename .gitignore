@@ -36,4 +36,4 @@ circ
 circ.db
 
 # log files
-logs/
+logs/*

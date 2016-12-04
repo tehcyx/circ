@@ -8,6 +8,8 @@
 #include <logger.h>
 #include <server.h>
 #include <client.h>
+#include <channel.h>
+#include <utils.h>
 
 /* Define port to use */
 #ifndef CIRC_PORT
@@ -23,19 +25,24 @@
 #endif
 
 int main(int argc, char **argv) {
+	db_init();
 
-	init_db();
+	log_init(NULL, LOG_DEBUG);
+
+	mutexes_init();
 
 	int socket_fd = server_run(CIRC_PORT);
-	logger(LOG_DEBUG, "hello", NULL);
+	//log_info("Started server v%s.%s on port %s", CIRC_VERSION_MAJOR, CIRC_VERSION_MINOR, CIRC_PORT);
 
 	int errno;
 
 	client_list_init();
 
+	channel_init();
+
 	if ( (errno = server_sock_listen(socket_fd)) < 0) {
-		fprintf(stderr, "Server could not start, listen on socket failed: %s\n", strerror(errno)); 
-		exit(EXIT_FAILURE); 
+		fprintf(stderr, "Server could not start, listen on socket failed: %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
 	}
 
 	server_accept(socket_fd);
