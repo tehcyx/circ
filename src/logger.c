@@ -69,7 +69,7 @@ void log_init(const char* file, const uint8_t level) {
 
 	FILE* fp;
 	if (file == NULL) {
-		ensurePathExists("logs");
+		ensure_path_exists("logs");
 		LOG_FILE = "logs/log.txt";
 	} else {
 		LOG_FILE = file;
@@ -80,7 +80,7 @@ void log_init(const char* file, const uint8_t level) {
 	fclose(fp);
 }
 
-void ensurePathExists(const char* path) {
+void ensure_path_exists(const char* path) {
 	struct stat st = {0};
 
 	if (stat(path, &st) == -1) {
