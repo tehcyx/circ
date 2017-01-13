@@ -1,3 +1,12 @@
+```none
+ .o88b. d888888b d8888b.  .o88b. 
+d8P  Y8   `88'   88  `8D d8P  Y8 
+8P         88    88oobY' 8P      
+8b         88    88`8b   8b      
+Y8b  d8   .88.   88 `88. Y8b  d8 
+ `Y88P' Y888888P 88   YD  `Y88P' 
+```
+
 # circ
 IRC server written in C (project to get hands on C networking) using sqlite
 
