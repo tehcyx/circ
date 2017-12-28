@@ -11,8 +11,12 @@
 const char* LOG_FILE = NULL;
 uint8_t LOG_LEVEL = LOG_DEBUG;
 
+const char* TAG_ERROR = "error";
+const char* TAG_WARN = "warn";
+const char* TAG_INFO = "info";
+const char* TAG_DEBUG = "debug";
+
 void log_format(const char* tag, const char* message, va_list args) {
-	// if (LOG_LEVEL)
 	time_t now;
 	time(&now);
 
@@ -26,40 +30,43 @@ void log_format(const char* tag, const char* message, va_list args) {
 	vsprintf(msg, message, args);
 	va_end(args);
 
-	FILE* fp;
-	fp = fopen(LOG_FILE, "a");
+	if (LOG_LEVEL == LOG_DEBUG || strcmp(TAG_DEBUG, tag)) {
+		printf("%s: %s\n", log_entry, msg);
+	} else {
+		FILE* fp;
+		fp = fopen(LOG_FILE, "a");
 
-	fprintf(fp, "%s: %s\n", log_entry, msg);
+		fprintf(fp, "%s: %s\n", log_entry, msg);
 
-	fclose(fp);
-	printf("%s: %s\n", log_entry, msg);
+		fclose(fp);
+	}
 }
 
 void log_info(const char* message, ...) {
 	va_list args;
 	va_start(args, message);
-	log_format("info", message, args);
+	log_format(TAG_INFO, message, args);
 	va_end(args);
 }
 
 void log_error(const char* message, ...) {
 	va_list args;
 	va_start(args, message);
-	log_format("error", message, args);
+	log_format(TAG_ERROR, message, args);
 	va_end(args);
 }
 
 void log_warn(const char* message, ...) {
 	va_list args;
 	va_start(args, message);
-	log_format("warn", message, args);
+	log_format(TAG_WARN, message, args);
 	va_end(args);
 }
 
 void log_debug(const char* message, ...) {
 	va_list args;
 	va_start(args, message);
-	log_format("debug", message, args);
+	log_format(TAG_DEBUG, message, args);
 	va_end(args);
 }
 
