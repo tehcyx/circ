@@ -32,6 +32,9 @@ void channel_stop_events(channel* chan, client* cli);
 
 bool channel_exists(list* chan_list, channel* chan);
 bool channel_name_exists(char* chan_name);
+
+void channel_print_to_user(client* cli, char* msg);
+void channel_print_raw_to_user(client* cli, char* msg);
 void channel_free(channel* chan);
 
 #endif

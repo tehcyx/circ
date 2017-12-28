@@ -37,3 +37,6 @@ circ.db
 
 # log files
 logs/*
+
+# editors
+.vscode

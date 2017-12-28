@@ -23,6 +23,8 @@ char* client_read_connect_cmd(char* cmd, char* args);
 char* client_read_connect_pass(char* cmd, char* args, bool* pass);
 char* client_read_recipient(char* cmd, char* args);
 
+//bool client_nick_change(char* new_nick, char* old_nick, int client_sock, pthread_t client_thread);
+void client_set_prompt(client* cli, char* prompt);
 bool client_nick_exists(char* nick);
 
 void client_list_init(); //create empty list of users

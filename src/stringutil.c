@@ -17,7 +17,7 @@ bool valid_charset(char* test) {
 	}
 	int len = strlen(test);
 
-	for (int i = 0; i < len; i++) {
+	for (int i = 0; i < len - 1; i++) {
 		if (!char_in_charset(test[i]))
 			return false;
 	}

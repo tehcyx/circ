@@ -32,6 +32,7 @@ void log_format(const char* tag, const char* message, va_list args) {
 	fprintf(fp, "%s: %s\n", log_entry, msg);
 
 	fclose(fp);
+	printf("%s: %s\n", log_entry, msg);
 }
 
 void log_info(const char* message, ...) {

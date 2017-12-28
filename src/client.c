@@ -8,16 +8,17 @@
 #include <utils.h>
 #include <stringutil.h>
 #include <channel.h>
+#include <logger.h>
 
 const uint16_t BUFFER_SIZE = 512;
 
-void client_connect(client_info* new_client) {
+void client_connect(client_info* cli) {
 	char buf[BUFFER_SIZE], errMsg[BUFFER_SIZE];
 	char* next = NULL;
 	char* nick = NULL;
 
-	pthread_t client_thread = new_client->thread;
-	int client_sock = new_client->sock;
+	pthread_t client_thread = cli->thread;
+	int client_sock = cli->sock;
 
 	bool quit = false;
 	bool err = false;
@@ -34,9 +35,9 @@ void client_connect(client_info* new_client) {
 		next = client_read_socket(client_sock, buf, &err);
 
 		if (err) {
-			printf("An error occured, closing connection to client socket. Error: %s\n", strerror(errno));
+			log_error("An error occured, now closing connection to client socket. Error: %s\n", strerror(errno));
 			close(client_sock);
-			free(new_client);
+			free(cli);
 			if (next) {
 				free(next);
 			}
@@ -46,16 +47,15 @@ void client_connect(client_info* new_client) {
 			continue; // nothing received yet, go on
 		} else {
 			trim_str(next);
-			printf("Received message from client: '%s'\n", next);
+			log_debug("Received message from client: '%s'\n", next);
 
 			char* cmd = strtok(next, " ");
 			char* args = strtok(NULL, " ");
 
-			printf("COMMAND: %s\n", cmd);
-			printf("ARGS: %s\n", args);
+			log_debug("COMMAND: %s, ARGS: %s\n", cmd, args);
 
 			if (cmd == NULL) {
-				printf("Empty msg received from client. Ignoring\n");
+				log_debug("Empty msg received from client. Ignoring\n");
 				continue;
 			} else if (strcmp(cmd, PASS_CMD) == 0 && !pass) {
 				client_read_connect_pass(cmd, args, &pass);
@@ -64,21 +64,21 @@ void client_connect(client_info* new_client) {
 				nick = client_read_connect_cmd(cmd, args);
 
 				if (nick == NULL) {
-					printf("NULL nick received from client\n");
+					log_debug("NULL nick received from client\n");
 					sprintf(errMsg, "%s :No nickname given", NICK_NULL);
 					write(client_sock, errMsg, strlen(errMsg) + 1);
 				} else if (client_nick_exists(nick)) {
-					printf("Nick %s already exists.\n", nick);
+					log_debug("Nick %s already exists.\n", nick);
 					sprintf(errMsg, "%s * %s :Nickname is already in use\n", NICK_IN_USE, nick);
 					write(client_sock, errMsg, strlen(errMsg) + 1);
 					free(nick);
 				} else if (!valid_charset(nick)) {
-					printf("Nick %s not in valid charset.\n", nick);
+					log_debug("Nick %s not in valid charset.\n", nick);
 					sprintf(errMsg, "%s * %s :Erroneous nickname\n ", NICK_INVALID, nick);
 					write(client_sock, errMsg, strlen(errMsg) + 1);
 					free(nick);
 				} else {
-					printf("Starting NICK init for '%s'.\n", nick);
+					log_debug("Starting NICK init for '%s'.\n", nick);
 					free(next);
 					client_init(nick, client_sock, client_thread);
 				}
@@ -86,9 +86,9 @@ void client_connect(client_info* new_client) {
 		}
 
 		if (quit == true) {
-			printf("Received %s command from client. Terminating client socket %d.\n", QUIT_CMD, client_sock);
+			log_debug("Received %s command from client. Terminating client socket %d.\n", REG_QUIT_CMD, client_sock);
 			close(client_sock);
-			free(new_client);
+			free(cli);
 			free(next);
 			pthread_exit(NULL); //free user
 			break;
@@ -178,18 +178,54 @@ void client_free(client* c) {
 }
 
 void client_init(char* nick, int client_sock, pthread_t client_thread) {
-	client* new_client = (client*)malloc(sizeof(client));
-	new_client->client_sock = client_sock;
-	new_client->nick = nick;
-	new_client->client_thread = client_thread;
-	pthread_mutex_init(&(new_client->client_sock_mutex), NULL);
+	client* cli = (client*)malloc(sizeof(client));
+	cli->client_sock = client_sock;
+	cli->nick = nick;
+	cli->client_thread = client_thread;
+	pthread_mutex_init(&(cli->client_sock_mutex), NULL);
 
-	node* n = create_node(new_client);
+	node* n = create_node(cli);
 	pthread_mutex_lock(&users_mutex); //to disable two thread working on the user list
 	list_add(client_list, n);
 	pthread_mutex_unlock(&users_mutex);
 
-	channel_client_join(LOBBY, new_client);
+	log_debug("Adding user %s to LOBBY", cli->nick);
+	channel_client_join(LOBBY, cli);
+}
+
+// bool client_nick_change(char* new_nick, char* old_nick, int client_sock, pthread_t client_thread) {
+// 	client* tmp_u;
+// 	bool exists = false;
+// 	node* iter = client_list->head;
+
+// 	while (iter != NULL) {
+// 		tmp_u = (client*)iter->data;
+// 		if(strcasecmp(tmp_u->nick, old_nick) == 0 && tmp_u->client_sock == client_sock && tmp_u->client_thread == client_thread) {
+// 			tmp_u->nick = new_nick;
+// 			exists = true;
+// 			break;
+// 		}
+// 		iter=iter->next;
+// 	}
+// 	return exists;
+// }
+
+void client_set_prompt(client* cli, char* prompt) {
+	char client_msg[BUFFER_SIZE]; 
+	int bytes_written;
+	
+	sprintf(client_msg, "%s %s", PROMPT_CMD, prompt); 
+
+	pthread_mutex_lock(&(cli->client_sock_mutex)); // atomic action
+	bytes_written = send(cli->client_sock, client_msg, strlen(client_msg) + 1, 0);
+	pthread_mutex_unlock(&(cli->client_sock_mutex)); 
+
+	if (bytes_written < 0) {
+		log_error("Error sending prompt.\nError: %s\n", strerror(errno)); 
+	}
+	else if (bytes_written == 0) {
+		log_error("Error sending prompt: 0 bytes written.\nError: %s\n", strerror(errno)); 
+	}
 }
 
 bool client_nick_exists(char* nick) {
